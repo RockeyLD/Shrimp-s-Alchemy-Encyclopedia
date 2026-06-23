@@ -1218,8 +1218,9 @@ function renderTooltip(node, clientX, clientY) {
   const iconDisplay = iconHtml
     ? `<span style="margin-right:6px;font-size:1.1em;">${iconHtml}</span>`
     : `<span style="display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:${node.color};color:#0f1923;font-size:12px;font-weight:700;margin-right:6px;">${node.name.charAt(0)}</span>`;
-  const isDragonStudio = DRAGON_STUDIO_ELEMENTS.has(node.id);
-  let html = `<div class="tt-name" style="color:${node.color};position:relative;padding-right:${isDragonStudio ? '72px' : '0'};">${iconDisplay}${node.name}${isDragonStudio ? '<img src="Image/Dragon.svg" style="position:absolute;top:-18px;right:0;width:60px;height:60px;filter:drop-shadow(0 0 3px rgba(240,192,64,0.6));" alt="Dragon Studio">' : ''}</div>`;
+    const isDragonStudio = DRAGON_STUDIO_ELEMENTS.has(node.id);
+    const ttColor = node.isGhost ? '#4fc3f7' : node.color;
+    let html = `<div class="tt-name" style="color:${ttColor};position:relative;padding-right:${isDragonStudio ? '72px' : '0'};">${iconDisplay}${node.name}${isDragonStudio ? '<img src="Image/Dragon.svg" style="position:absolute;top:-18px;right:0;width:60px;height:60px;filter:drop-shadow(0 0 3px rgba(240,192,64,0.6));" alt="Dragon Studio">' : ''}</div>`;
   if (node.isBase) {
     html += `<div class="tt-recipe">Base Element</div>`;
   } else {
