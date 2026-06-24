@@ -236,9 +236,31 @@
     padding: 6px 10px;
     min-width: 36px;
   }
-  #controls #btn-theme:hover {
+  #controls   #btn-theme:hover {
     color: #f6d570;
   }
+  .icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    vertical-align: middle;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+    background-color: currentColor;
+  }
+  .icon-star { -webkit-mask-image: url('Image/star-solid-full.svg'); mask-image: url('Image/star-solid-full.svg'); }
+  .icon-lock { -webkit-mask-image: url('Image/lock-solid-full.svg'); mask-image: url('Image/lock-solid-full.svg'); }
+  .icon-cloud-check { -webkit-mask-image: url('Image/cloud-check.svg'); mask-image: url('Image/cloud-check.svg'); }
+  .icon-cloud-exclamation { -webkit-mask-image: url('Image/cloud-exclamation.svg'); mask-image: url('Image/cloud-exclamation.svg'); }
+  .icon-cloud-xmark { -webkit-mask-image: url('Image/cloud-xmark.svg'); mask-image: url('Image/cloud-xmark.svg'); }
+  .icon-gold { background-color: #f0c040; }
+  .icon-red { background-color: #ef5350; }
+  .icon-green { background-color: #66bb6a; }
+  .icon-yellow { background-color: #ffb74d; }
 </style>
 </head>
 <body>
@@ -1284,9 +1306,9 @@ function renderTooltip(node, clientX, clientY) {
     html += `</div>`;
   }
   if (node.isFinal) {
-    html += `<div class="tt-final">⭐ Final Item</div>`;
+    html += `<div class="tt-final"><span class="icon icon-star icon-gold"></span> Final Item</div>`;
   } else if (node.isImplicitFinal) {
-    html += `<div class="tt-final" style="background:rgba(255,107,107,0.15);color:#ff6b6b;">🔒 End Product (not marked as final)</div>`;
+    html += `<div class="tt-final" style="background:rgba(255,107,107,0.15);color:#ff6b6b;"><span class="icon icon-lock icon-red"></span> End Product (not marked as final)</div>`;
   }
   tooltip.innerHTML = html;
   tooltip.style.display = 'block';
@@ -1557,7 +1579,7 @@ async function mainInit() {
           }));
         } catch (e) { /* storage unavailable */ }
 
-        dataSourceEl.textContent = `✅ Live data from GitHub (${RECIPES.length} recipes)`;
+        dataSourceEl.innerHTML = `<span class="icon icon-cloud-check icon-green"></span> Live data from GitHub (${RECIPES.length} recipes)`;
         dataSourceEl.style.color = '#66bb6a';
         fetched = true;
       }
@@ -1577,13 +1599,13 @@ async function mainInit() {
         RECIPES = cached.recipes;
         usedCache = true;
         const age = Math.round((Date.now() - (cached.timestamp || 0)) / 60000);
-        dataSourceEl.textContent = `📦 Cached data (${age}min ago, ${RECIPES.length} recipes)`;
+        dataSourceEl.innerHTML = `<span class="icon icon-cloud-exclamation icon-yellow"></span> Cached data (${age}min ago, ${RECIPES.length} recipes)`;
         dataSourceEl.style.color = '#ffb74d';
       }
     } catch (e) { /* cache corrupt or unavailable */ }
 
     if (!usedCache) {
-      dataSourceEl.textContent = '❌ No data available (fetch failed, no cache)';
+      dataSourceEl.innerHTML = '<span class="icon icon-cloud-xmark icon-red"></span> No data available (fetch failed, no cache)';
       dataSourceEl.style.color = '#ef5350';
       return;
     }
