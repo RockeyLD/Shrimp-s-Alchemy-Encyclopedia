@@ -104,6 +104,11 @@
     background: var(--btn-hover);
     color: var(--text);
   }
+  #controls button.active {
+    background: #f0c040;
+    color: #0f1923;
+    border-color: #f0c040;
+  }
   #search-input {
     background: var(--input-bg);
     border: 1px solid var(--border-light);
@@ -223,6 +228,7 @@
     <button id="btn-expand" title="Zoom Out">−</button>
     <button id="btn-collapse" title="Zoom In">+</button>
     <button id="btn-reset" title="Reset View">Reset</button>
+    <button id="btn-dragon" title="Highlight Dragon Studio">Dragon</button>
     <button id="btn-theme" title="Toggle Theme">🌙</button>
   </div>
 </div>
@@ -594,6 +600,13 @@ canvas.addEventListener('click', e => {
   const rect = canvas.getBoundingClientRect();
   const mx = e.clientX - rect.left;
   const my = e.clientY - rect.top;
+
+  if (dragonStudioHighlight) {
+    dragonStudioHighlight = false;
+    document.getElementById('btn-dragon').classList.remove('active');
+    activeChain = null;
+  }
+
   const w = screenToWorld(mx, my);
 
   let found = null;
@@ -970,6 +983,7 @@ function screenToWorld(sx, sy) {
 let activeChain = null;
 let upstreamSet = null;
 let downstreamSet = null;
+let dragonStudioHighlight = false;
 
 function bezierPoint(p0, p1, p2, p3, t) {
   const mt = 1 - t;
@@ -1174,6 +1188,14 @@ function render() {
     ctx.stroke();
     ctx.setLineDash([]);
 
+    if (dragonStudioHighlight && DRAGON_STUDIO_ELEMENTS.has(n.id)) {
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, r + 4 * camZoom, 0, Math.PI * 2);
+      ctx.strokeStyle = '#f0c040';
+      ctx.lineWidth = 2.5;
+      ctx.stroke();
+    }
+
     if (camZoom > 0.3) {
       const fontSize = Math.max(9, Math.min(13, 11 * camZoom));
       ctx.font = `600 ${fontSize}px 'Segoe UI', system-ui, sans-serif`;
@@ -1287,7 +1309,7 @@ function handleHover(e) {
   });
 
   if (found) {
-    if (!isSearching && hoveredNode !== found && !lockedNode) {
+    if (!isSearching && !dragonStudioHighlight && hoveredNode !== found && !lockedNode) {
       hoveredNode = found;
       // One-layer highlighting: only direct upstream ingredients + direct downstream products
       activeChain = new Set([found.id]);
@@ -1312,7 +1334,7 @@ function handleHover(e) {
       renderTooltip(found, e.clientX, e.clientY);
     }
   } else {
-    if (!isSearching && hoveredNode !== null && !lockedNode) {
+    if (!isSearching && !dragonStudioHighlight && hoveredNode !== null && !lockedNode) {
       hoveredNode = null;
       activeChain = null;
       upstreamSet = null;
@@ -1329,6 +1351,10 @@ function handleHover(e) {
 // =============================================
 const searchInput = document.getElementById('search-input');
 searchInput.addEventListener('input', () => {
+  if (dragonStudioHighlight) {
+    dragonStudioHighlight = false;
+    document.getElementById('btn-dragon').classList.remove('active');
+  }
   const query = searchInput.value.trim().toLowerCase();
   if (!query) {
     activeChain = null;
@@ -1374,6 +1400,8 @@ let avgX = 0, avgY = 0;
 document.getElementById('btn-reset').addEventListener('click', () => {
   camX = avgX; camY = avgY; camZoom = 0.38;
   searchInput.value = '';
+  dragonStudioHighlight = false;
+  document.getElementById('btn-dragon').classList.remove('active');
   activeChain = null;
   hoveredNode = null;
   lockedNode = null;
@@ -1390,6 +1418,24 @@ document.getElementById('btn-expand').addEventListener('click', () => {
 
 document.getElementById('btn-collapse').addEventListener('click', () => {
   camZoom = Math.min(3, camZoom * 1.4);
+  render();
+});
+
+document.getElementById('btn-dragon').addEventListener('click', () => {
+  dragonStudioHighlight = !dragonStudioHighlight;
+  const btn = document.getElementById('btn-dragon');
+  if (dragonStudioHighlight) {
+    btn.classList.add('active');
+    hoveredNode = null;
+    lockedNode = null;
+    upstreamSet = null;
+    downstreamSet = null;
+    tooltip.style.display = 'none';
+    activeChain = new Set(DRAGON_STUDIO_ELEMENTS);
+  } else {
+    btn.classList.remove('active');
+    activeChain = null;
+  }
   render();
 });
 
