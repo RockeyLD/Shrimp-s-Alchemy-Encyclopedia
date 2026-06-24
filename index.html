@@ -1210,14 +1210,6 @@ function render() {
     ctx.stroke();
     ctx.setLineDash([]);
 
-    if (dragonStudioHighlight && DRAGON_STUDIO_ELEMENTS.has(n.id)) {
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, r + 4 * camZoom, 0, Math.PI * 2);
-      ctx.strokeStyle = '#f0c040';
-      ctx.lineWidth = 2.5;
-      ctx.stroke();
-    }
-
     if (camZoom > 0.3) {
       const fontSize = Math.max(9, Math.min(13, 11 * camZoom));
       ctx.font = `600 ${fontSize}px 'Segoe UI', system-ui, sans-serif`;
