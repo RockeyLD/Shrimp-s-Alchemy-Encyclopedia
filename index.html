@@ -1345,7 +1345,11 @@ function handleHover(e) {
 
     canvas.style.cursor = 'pointer';
     if (!lockedNode) {
-      renderTooltip(found, e.clientX, e.clientY);
+      if (!dragonStudioHighlight || DRAGON_STUDIO_ELEMENTS.has(found.id)) {
+        renderTooltip(found, e.clientX, e.clientY);
+      } else {
+        tooltip.style.display = 'none';
+      }
     }
   } else {
     if (!isSearching && !dragonStudioHighlight && hoveredNode !== null && !lockedNode) {
