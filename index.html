@@ -212,6 +212,25 @@
     transition: background 0.3s, border-color 0.3s;
   }
   #stats span { color: var(--accent2); font-weight: 600; }
+  #btn-dragon {
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 36px;
+  }
+  #btn-dragon img {
+    height: 18px;
+    width: auto;
+    display: block;
+    filter: invert(1) brightness(1.8);
+  }
+  body.light #btn-dragon img {
+    filter: invert(0);
+  }
+  #btn-dragon.active img {
+    filter: brightness(0) saturate(100%) !important;
+  }
   #btn-theme {
     font-size: 16px;
     padding: 6px 10px;
@@ -228,7 +247,7 @@
     <button id="btn-expand" title="Zoom Out">−</button>
     <button id="btn-collapse" title="Zoom In">+</button>
     <button id="btn-reset" title="Reset View">Reset</button>
-    <button id="btn-dragon" title="Highlight Dragon Studio">Dragon</button>
+    <button id="btn-dragon" title="Highlight Dragon Studio"><img src="Image/dragon-solid-full.svg" alt="Dragon Studio"></button>
     <button id="btn-theme" title="Toggle Theme">🌙</button>
   </div>
 </div>
