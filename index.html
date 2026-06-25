@@ -261,6 +261,78 @@
   .icon-red { background-color: #ef5350; }
   .icon-green { background-color: #66bb6a; }
   .icon-yellow { background-color: #ffb74d; }
+  .modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 300;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+  }
+  .modal.open { display: flex; }
+  .modal-content {
+    position: relative;
+    background: var(--panel-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 12px;
+    padding: 28px 32px;
+    max-width: 380px;
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 12px 40px var(--shadow);
+    color: var(--text);
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 24px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .modal-close:hover { color: var(--text); }
+  .modal-title {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    color: var(--accent);
+  }
+  .modal-text {
+    font-size: 15px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .modal-text strong { color: var(--accent2); }
+  .modal-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .modal-links a {
+    display: block;
+    padding: 10px 16px;
+    border-radius: 8px;
+    background: var(--btn-bg);
+    border: 1px solid var(--border-light);
+    color: var(--text);
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+  .modal-links a:hover {
+    background: var(--accent);
+    color: #0f1923;
+    border-color: var(--accent);
+  }
 </style>
 </head>
 <body>
@@ -273,6 +345,7 @@
     <button id="btn-collapse" title="Zoom In">+</button>
     <button id="btn-reset" title="Reset View">Reset</button>
     <button id="btn-dragon" title="Highlight Dragon Studio"><svg viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M352 188.5L300.1 175.5C293.6 173.9 288.8 168.4 288.1 161.7C287.4 155 290.9 148.6 296.8 145.6L337.6 125.2L294.3 92.7C288.8 88.6 286.5 81.4 288.7 74.8C290.9 68.2 297.1 64 304 64L464 64C494.2 64 522.7 78.2 540.8 102.4L598.4 179.2C604.6 187.5 608 197.6 608 208C608 234.5 586.5 256 560 256L538.5 256C521.5 256 505.2 249.3 493.2 237.3L479.9 224L447.9 224L447.9 245.5C447.9 270.3 460.7 293.4 481.7 306.6L588.3 373.2C620.4 393.3 639.9 428.4 639.9 466.3C639.9 526.9 590.8 576.1 530.1 576.1L32.3 576C29 576 25.7 575.6 22.7 574.6C13.5 571.8 6 565 2.3 556C1 552.7 .1 549.1 0 545.3C-.2 541.6 .3 538 1.3 534.6C4.1 525.4 10.9 517.9 19.9 514.2C22.9 513 26.1 512.2 29.4 512L433.3 476C441.6 475.3 448 468.3 448 459.9C448 455.6 446.3 451.5 443.3 448.5L398.9 404.1C368.9 374.1 352 333.4 352 291L352 188.5zM512 136.3C512 136.2 512 136.1 512 136C512 135.9 512 135.8 512 135.7L512 136.3zM510.7 143.7L464.3 132.1C464.1 133.4 464 134.7 464 136C464 149.3 474.7 160 488 160C498.6 160 507.5 153.2 510.7 143.7zM130.9 180.5C147.2 166 171.3 164.3 189.4 176.4L320 263.4L320 290.9C320 323.7 328.4 355.7 344 383.9L112 383.9C105.3 383.9 99.3 379.7 97 373.5C94.7 367.3 96.5 360.2 101.6 355.8L171 296.3L18.4 319.8C11.4 320.9 4.5 317.2 1.5 310.8C-1.5 304.4 .1 296.8 5.4 292L130.9 180.5z"/></svg></button>
+    <button id="btn-credit" title="Credit">Credit</button>
     <button id="btn-theme" title="Toggle Theme"><svg viewBox="0 0 640 640" xmlns="http://www.w3.org/2000/svg"><path fill="currentColor" d="M320 64C178.6 64 64 178.6 64 320C64 461.4 178.6 576 320 576C388.8 576 451.3 548.8 497.3 504.6C504.6 497.6 506.7 486.7 502.6 477.5C498.5 468.3 488.9 462.6 478.8 463.4C473.9 463.8 469 464 464 464C362.4 464 280 381.6 280 280C280 207.9 321.5 145.4 382.1 115.2C391.2 110.7 396.4 100.9 395.2 90.8C394 80.7 386.6 72.5 376.7 70.3C358.4 66.2 339.4 64 320 64z"/></svg></button>
   </div>
 </div>
@@ -296,6 +369,18 @@
 <div id="stats">
   Elements: <span id="stat-elements">0</span> &nbsp;|&nbsp;
   Recipes: <span id="stat-recipes">0</span>
+</div>
+
+<div id="credit-modal" class="modal">
+  <div class="modal-content">
+    <button id="credit-close" class="modal-close" aria-label="Close">&times;</button>
+    <h2 class="modal-title">Credit</h2>
+    <p class="modal-text">All Rights Belong to <strong>@Shrimp0913</strong></p>
+    <div class="modal-links">
+      <a href="https://github.com/shrimp0913" target="_blank" rel="noopener noreferrer">Follow @Shrimp0913!</a>
+      <a href="https://github.com/shrimp0913/Shrimp-s-Alchemy" target="_blank" rel="noopener noreferrer">Support the Original Game!</a>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1517,6 +1602,20 @@ function getThemeCanvasColors() {
     chainArrow: 'rgba(255,255,255,0.55)',
   };
 }
+
+document.getElementById('btn-credit').addEventListener('click', () => {
+  document.getElementById('credit-modal').classList.add('open');
+});
+
+document.getElementById('credit-close').addEventListener('click', () => {
+  document.getElementById('credit-modal').classList.remove('open');
+});
+
+document.getElementById('credit-modal').addEventListener('click', (e) => {
+  if (e.target.id === 'credit-modal') {
+    document.getElementById('credit-modal').classList.remove('open');
+  }
+});
 
 btnTheme.addEventListener('click', () => {
   isLightTheme = !isLightTheme;
