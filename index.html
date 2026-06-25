@@ -1425,6 +1425,10 @@ function renderTooltip(node, clientX, clientY) {
 function handleHover(e) {
   // Don't override search highlighting, but still show tooltip
   const isSearching = !!searchInput.value.trim();
+  if (document.getElementById('credit-modal').classList.contains('open')) {
+    if (!lockedNode) tooltip.style.display = 'none';
+    return;
+  }
   if (isDragging) {
     if (!lockedNode) tooltip.style.display = 'none';
     return;
