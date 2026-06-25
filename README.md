@@ -5,7 +5,7 @@ Official Link: [https://rockeyld.github.io/Shrimp-s-Alchemy-Encyclopedia](https:
 
 ---
 
-## Developer Notes for AI Assistants
+## Developer Notes for AI Assistants and Modders
 
 ### 1. Project Architecture
 - **Single-file app**: Everything lives in `index.html` (embedded CSS + JavaScript). No build step, no frameworks.
