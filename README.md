@@ -11,17 +11,18 @@ Official Link: [https://rockeyld.github.io/Shrimp-s-Alchemy-Encyclopedia](https:
 - **Single-file app**: Everything lives in `index.html` (embedded CSS + JavaScript). No build step, no frameworks.
 - **Data source**: On load, it fetches the raw `app.js` from `https://raw.githubusercontent.com/shrimp0913/Shrimp-s-Alchemy/main/app.js`.
 - **Fallback**: If the fetch fails, it falls back to `localStorage` cache key `shrimp_alchemy_cache`.
-- **Parsing**: The function `parseAppJs(source)` (around line 410) regex-parses recipes, encrypted recipes, element names/icons, and `finalItems` from the raw JS text.
+- **Parsing**: The function `parseAppJs(source)` (around line 412) regex-parses recipes, encrypted recipes, element names/icons, and `finalItems` from the raw JS text.
+- **Data source indicator**: A small badge in the top-right shows data status (Live / Cached / Error). It auto-fades after 5 seconds (see `mainInit`, around line 1755).
 
 ### 2. Graph & Canvas System
 - **Renderer**: HTML5 Canvas with a custom force-directed layout.
-- **Nodes**: Each element is a node. Properties include `id`, `name`, `color`, `depth`, `isBase`, `isFinal`, `isGhost`, `isImplicitFinal`.
+- **Nodes**: Each element is a node. Properties include `id`, `name`, `color`, `depth`, `isBase`, `isFinal`, `isGhost`, `isImplicitFinal`, `isDefaultColor`.
 - **Edges**: Each recipe `A + B = Result` creates two directed edges (`A→Result`, `B→Result`).
 - **Layout**: `runOrganicLayout()` runs a force simulation with repulsion and edge attraction. After settling, `startFloating()` runs a continuous gentle animation loop.
 - **Camera**: Pan by dragging, zoom by scroll wheel or pinch. Variables: `camX`, `camY`, `camZoom`.
 
 ### 3. How to Change Element Colors
-Colors are defined in the `CATEGORY_COLORS` object (around line 835). If a new element is fetched but not listed here, it defaults to `#66bb6a` (green).
+Colors are defined in the `CATEGORY_COLORS` object (around line 840). If a new element is fetched but not listed here, it defaults to **transparent green** (`rgba(102,187,106,0.3)`) with a semi-transparent border (`rgba(102,187,106,0.5)`). This makes unmapped elements visually distinct.
 
 ```js
 const CATEGORY_COLORS = {
@@ -52,11 +53,11 @@ The app uses **CSS mask icons** for UI elements (not the element icons from the 
 ### 5. Interaction & Highlighting
 - **Hover / Click**: Highlights the element's direct upstream ingredients (orange) and downstream products (cyan). Implemented in `handleHover()` and `canvas.click`.
 - **Search**: The search box filters elements by name/id and highlights their one-layer connections.
-- **Dragon Studio**: A hardcoded set `DRAGON_STUDIO_ELEMENTS` (around line 539) marks special elements. Clicking the dragon button highlights only these nodes.
+- **Dragon Studio**: A hardcoded set `DRAGON_STUDIO_ELEMENTS` (around line 541) marks special elements. Clicking the dragon button highlights only these nodes.
 - **Theme**: Toggle between dark and light themes via CSS `body.light` and CSS variables. `getThemeCanvasColors()` returns canvas-specific colors for the current theme.
 
 ### 6. Modals & UI
-- **Credit modal**: `#credit-modal` is toggled via the `.open` class. When open, hover highlights on the canvas are disabled (see `handleHover()`).
+- **Credit modal**: `#credit-modal` is toggled via the `.open` class. It displays the `SHRIMP'S ALCHEMY.svg` logo (with theme-aware `filter` CSS) and links to the original author. When open, hover highlights on the canvas are disabled (see `handleHover()`).
 - **Stats**: Bottom-right panel shows total element and recipe counts.
 - **Legend**: Bottom-left panel explains node/edge color meanings.
 
@@ -64,6 +65,7 @@ The app uses **CSS mask icons** for UI elements (not the element icons from the 
 - **Ghost elements**: IDs that appear in recipes but have no name/icon definition in the fetched data. They are auto-created with a question-mark icon and dashed cyan border.
 - **Final items**: Explicitly marked by the original game (`finalItems.add(...)`). They get a gold dashed border and a star badge in the tooltip.
 - **Implicit finals**: Elements that are never used as ingredients in any recipe. They get a red dashed border.
+- **Default-color elements**: Elements not listed in `BASE_COLORS` or `CATEGORY_COLORS` render as transparent green nodes (`rgba(102,187,106,0.3)` fill, `rgba(102,187,106,0.5)` border) to distinguish them from categorized elements. Tracked via `node.isDefaultColor` in `initNodes()` (around line 925).
 
 ### 8. Common Pitfalls
 - **Quote inconsistency**: Always use single quotes for `CATEGORY_COLORS` keys, especially IDs with hyphens (e.g., `'glass-water'`). Plain word keys like `lake` are legal unquoted but quoting them is safer and consistent.
