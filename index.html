@@ -919,6 +919,7 @@ function initNodes() {
 
   allElements.forEach(id => {
     const isImplicitFinal = implicitFinals.has(id);
+    const isDefaultColor = !BASE_COLORS[id] && !CATEGORY_COLORS[id];
     const node = {
       id,
       name: ELEMENT_NAMES[id] || id,
@@ -928,6 +929,7 @@ function initNodes() {
       isFinal: FINAL_ITEMS.has(id),
       isImplicitFinal,
       isGhost: GHOST_IDS.includes(id),
+      isDefaultColor,
       radius: 20,
       depth: BASE_ELEMENTS.includes(id) ? 0 : (recipesByResult[id] ? 999 : 0)
     };
@@ -1300,6 +1302,8 @@ function render() {
     if (inChain || !hasActiveChain) {
       if (n.isGhost) {
         ctx.fillStyle = 'transparent';
+      } else if (n.isDefaultColor) {
+        ctx.fillStyle = 'rgba(102,187,106,0.3)';
       } else {
         const grad = ctx.createRadialGradient(s.x - r*0.3, s.y - r*0.3, r*0.1, s.x, s.y, r);
         grad.addColorStop(0, lightenColor(n.color, 40));
@@ -1307,7 +1311,7 @@ function render() {
         ctx.fillStyle = grad;
       }
     } else {
-      ctx.fillStyle = n.isGhost ? 'transparent' : tc.dimNode;
+      ctx.fillStyle = n.isGhost ? 'transparent' : (n.isDefaultColor ? 'rgba(102,187,106,0.15)' : tc.dimNode);
     }
     ctx.fill();
 
@@ -1318,6 +1322,8 @@ function render() {
         ctx.strokeStyle = '#f0c040';
       } else if (n.isImplicitFinal) {
         ctx.strokeStyle = '#ff6b6b';
+      } else if (n.isDefaultColor) {
+        ctx.strokeStyle = 'rgba(102,187,106,0.5)';
       } else {
         ctx.strokeStyle = n.isBase ? tc.baseBorder : tc.normalBorder;
       }
