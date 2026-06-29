@@ -1,8 +1,8 @@
 # 虾之炼金术百科全书
 Shrimp's Alchemy 合并游戏中所有配方的官方百科全书！
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
-[![zh-CN](https://img.shields.io/badge/lang-zh--CN-red.svg)](README.zh-CN.md)
+[![en](https://img.shields.io/badge/docs-English-blue.svg)](README.md)
+[![zh-CN](https://img.shields.io/badge/docs-%E4%B8%AD%E6%96%87-red.svg)](README.zh-CN.md)
 
 官方链接：[https://rockeyld.github.io/Shrimp-s-Alchemy-Encyclopedia](https://rockeyld.github.io/Shrimp-s-Alchemy-Encyclopedia/)
 

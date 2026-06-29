@@ -1,8 +1,8 @@
 # Shrimp's Alchemy Encyclopedia
 The official encyclopedia of all of the recipes in the popular Shrimp's Alchemy merge game!
 
-[![en](https://img.shields.io/badge/lang-en-red.svg)](README.md)
-[![zh-CN](https://img.shields.io/badge/lang-zh--CN-red.svg)](README.zh-CN.md)
+[![en](https://img.shields.io/badge/docs-English-blue.svg)](README.md)
+[![zh-CN](https://img.shields.io/badge/docs-%E4%B8%AD%E6%96%87-red.svg)](README.zh-CN.md)
 
 Official Link: [https://rockeyld.github.io/Shrimp-s-Alchemy-Encyclopedia](https://rockeyld.github.io/Shrimp-s-Alchemy-Encyclopedia/)
 
