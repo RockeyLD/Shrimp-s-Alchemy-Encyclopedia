@@ -524,10 +524,10 @@ function parseAppJs(source) {
     finalItems.add(m[1]);
   }
 
-  // Normalize all SVG icons to uniform size
+  // Normalize all SVG icons to uniform size (only actual inline SVGs, not paths or HTML)
   for (const id in elementIcons) {
     let svg = elementIcons[id];
-    if (svg) {
+    if (svg && svg.includes('<svg')) {
       svg = svg.replace(/\s+width="[^"]*"/gi, '');
       svg = svg.replace(/\s+height="[^"]*"/gi, '');
       svg = svg.replace(/<svg\b([^>]*)>/i, '<svg$1 width="1.2em" height="1.2em">');
@@ -1682,7 +1682,36 @@ dataSourceEl.style.cssText = 'position:fixed;top:52px;right:16px;z-index:100;bac
 document.body.appendChild(dataSourceEl);
 
 // =============================================
-// Main init: try GitHub, fallback to cache
+// Preload SVG icons that are stored as file paths
+// =============================================
+const ICONS_BASE_URL = 'https://raw.githubusercontent.com/shrimp0913/Shrimp-s-Alchemy/main/';
+
+async function preloadSvgIcons() {
+  const promises = [];
+  for (const id in ELEMENT_ICONS) {
+    let icon = ELEMENT_ICONS[id];
+    if (icon && typeof icon === 'string' && icon.startsWith('icons/')) {
+      const url = ICONS_BASE_URL + icon;
+      const promise = fetch(url)
+        .then(r => {
+          if (r.ok) return r.text();
+          throw new Error('Failed to fetch ' + url);
+        })
+        .then(svg => {
+          svg = svg.replace(/\s+width="[^"]*"/gi, '');
+          svg = svg.replace(/\s+height="[^"]*"/gi, '');
+          svg = svg.replace(/<svg\b([^>]*)>/i, '<svg$1 width="1.2em" height="1.2em">');
+          ELEMENT_ICONS[id] = svg;
+        })
+        .catch(() => {
+          ELEMENT_ICONS[id] = '<i class="fas fa-question"></i>';
+        });
+      promises.push(promise);
+    }
+  }
+  await Promise.all(promises);
+}
+
 // =============================================
 async function mainInit() {
   dataSourceEl.textContent = 'Loading data...';
@@ -1746,6 +1775,9 @@ async function mainInit() {
       return;
     }
   }
+
+  // Preload external SVG icons so tooltips render correctly
+  await preloadSvgIcons();
 
   // Build graph, init nodes, layout, render
   buildGraph();
