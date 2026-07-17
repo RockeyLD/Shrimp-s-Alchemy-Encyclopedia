@@ -477,20 +477,11 @@ function parseAppJs(source) {
 
       // Extract name
       const nameMatch = block.match(/name:\s*'([^']+)'/);
-      // Extract icon: find icon: '...' - the value starts after icon: ' and ends at the last ' before discovered:
-      const iconStart = block.indexOf("icon:");
+      // Extract icon using regex (robust regardless of field order)
+      const iconMatch = block.match(/icon:\s*'([^']*)'/);
       let icon = '';
-      if (iconStart !== -1) {
-        const firstQuote = block.indexOf("'", iconStart + 5);
-        if (firstQuote !== -1) {
-          // Find the last single quote before 'discovered' or end of block
-          const discoveredIdx = block.indexOf('discovered');
-          const searchEnd = discoveredIdx !== -1 ? discoveredIdx : block.length;
-          let lastQuote = block.lastIndexOf("'", searchEnd - 1);
-          if (lastQuote > firstQuote) {
-            icon = block.substring(firstQuote + 1, lastQuote);
-          }
-        }
+      if (iconMatch) {
+        icon = iconMatch[1];
       }
 
       if (nameMatch) {
